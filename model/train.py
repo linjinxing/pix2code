@@ -52,7 +52,7 @@ def run(input_path, output_path, is_memory_intensive=False, pretrained_model=Non
 
 if __name__ == "__main__":
     argv = sys.argv[1:]
-
+    print ("tf.__version__:" + tf.__version__)
     if len(argv) < 2:
         print("Error: not enough argument supplied:")
         print("train.py <input path> <output path> <is memory intensive (default: 0)> <pretrained weights (optional)>")

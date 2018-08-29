@@ -18,11 +18,16 @@ class Utils:
 
     @staticmethod
     def get_preprocessed_img(img_path, image_size):
+        """ 因为opencv读入的图片矩阵数值是0到255，有时我们需要对其进行归一化为0~1  """
         import cv2
         img = cv2.imread(img_path)
+        # Utils.show(img)
+        # print(img.size)
         img = cv2.resize(img, (image_size, image_size))
-        img = img.astype('float32')
-        img /= 255
+        # print(img.size)
+        Utils.show(img)
+        img = img.astype('float32') # 注意需要先转化数据类型为float
+        img /= 255 # 归一化为0~1
         return img
 
     @staticmethod

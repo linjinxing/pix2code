@@ -10,6 +10,7 @@ import shutil
 
 from classes.Sampler import *
 
+# 参数为所有输入数据的路径
 argv = sys.argv[1:]
 
 if len(argv) < 1:
@@ -53,6 +54,7 @@ for path in paths:
     else:
         f = open("{}/{}.gui".format(input_path, path), 'r')
 
+    # 将图片的结构算出摘要，在评估集里，尽量存放不一样结构的数据
     with f:
         chars = ""
         for line in f:
@@ -79,12 +81,14 @@ for path in paths:
 assert len(eval_set) == evaluation_samples_number
 assert len(train_set) == training_samples_number
 
+# 创建评估集和训练集目录
 if not os.path.exists("{}/{}".format(os.path.dirname(input_path), EVALUATION_SET_NAME)):
     os.makedirs("{}/{}".format(os.path.dirname(input_path), EVALUATION_SET_NAME))
 
 if not os.path.exists("{}/{}".format(os.path.dirname(input_path), TRAINING_SET_NAME)):
     os.makedirs("{}/{}".format(os.path.dirname(input_path), TRAINING_SET_NAME))
 
+# 将文件拷贝到评估集和训练集目录中
 for path in eval_set:
     shutil.copyfile("{}/{}.png".format(input_path, path), "{}/{}/{}.png".format(os.path.dirname(input_path), EVALUATION_SET_NAME, path))
     shutil.copyfile("{}/{}.gui".format(input_path, path), "{}/{}/{}.gui".format(os.path.dirname(input_path), EVALUATION_SET_NAME, path))
