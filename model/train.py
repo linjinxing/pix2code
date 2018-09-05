@@ -19,6 +19,7 @@ def run(input_path, output_path, is_memory_intensive=False, pretrained_model=Non
     dataset.load(input_path, generate_binary_sequences=True)
     dataset.save_metadata(output_path)
     dataset.voc.save(output_path)
+    return
 
     if not is_memory_intensive:
         dataset.convert_arrays()

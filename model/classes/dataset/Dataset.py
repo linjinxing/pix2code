@@ -13,9 +13,13 @@ class Dataset:
         self.input_shape = None
         self.output_size = None
 
+        # 所有图片的id
         self.ids = []
         self.input_images = []
+        # 可以理解为 partial_sequences和next_words是为LSTM准备的吗？
+        # 存放部分关键词的时序
         self.partial_sequences = []
+        # partial_sequences时序后，下一个单词是什么？
         self.next_words = []
 
         self.voc = Vocabulary()
@@ -94,21 +98,28 @@ class Dataset:
             line = line.replace(",", " ,").replace("\n", " \n")
             tokens = line.split(" ")
             for token in tokens:
+                print("token:%s" % token)
                 self.voc.append(token)
                 token_sequence.append(token)
         token_sequence.append(END_TOKEN)
 
         suffix = [PLACEHOLDER] * CONTEXT_LENGTH
+        print('suffix:%r' % suffix)
 
         a = np.concatenate([suffix, token_sequence])
+        print('a:%r' % a)
         for j in range(0, len(a) - CONTEXT_LENGTH):
             context = a[j:j + CONTEXT_LENGTH]
             label = a[j + CONTEXT_LENGTH]
+            print('context:%r' % context)
+            print('label:%r' % label)            
 
             self.ids.append(sample_id)
             self.input_images.append(img)
             self.partial_sequences.append(context)
             self.next_words.append(label)
+
+        print("partial_sequences:%r, next_words:%r" %(self.partial_sequences, self.next_words))
 
     @staticmethod
     def indexify(partial_sequences, voc):
