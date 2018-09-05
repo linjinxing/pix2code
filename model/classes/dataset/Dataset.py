@@ -61,6 +61,8 @@ class Dataset:
                     self.append(file_name, gui, img)
 
         print("Generating sparse vectors...")
+        print("generate_binary_sequences: {}".format(generate_binary_sequences))
+        
         self.voc.create_binary_representation()
         self.next_words = self.sparsify_labels(self.next_words, self.voc)
         if generate_binary_sequences:
@@ -98,28 +100,28 @@ class Dataset:
             line = line.replace(",", " ,").replace("\n", " \n")
             tokens = line.split(" ")
             for token in tokens:
-                print("token:%s" % token)
+                # print("token:%s" % token)
                 self.voc.append(token)
                 token_sequence.append(token)
         token_sequence.append(END_TOKEN)
 
         suffix = [PLACEHOLDER] * CONTEXT_LENGTH
-        print('suffix:%r' % suffix)
+        # print('suffix:%r' % suffix)
 
         a = np.concatenate([suffix, token_sequence])
         print('a:%r' % a)
         for j in range(0, len(a) - CONTEXT_LENGTH):
             context = a[j:j + CONTEXT_LENGTH]
             label = a[j + CONTEXT_LENGTH]
-            print('context:%r' % context)
-            print('label:%r' % label)            
+            # print('context:%r' % context)
+            # print('label:%r' % label)            
 
             self.ids.append(sample_id)
             self.input_images.append(img)
             self.partial_sequences.append(context)
             self.next_words.append(label)
 
-        print("partial_sequences:%r, next_words:%r" %(self.partial_sequences, self.next_words))
+        # print("partial_sequences:%r, next_words:%r" %(self.partial_sequences, self.next_words))
 
     @staticmethod
     def indexify(partial_sequences, voc):

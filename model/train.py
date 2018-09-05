@@ -15,6 +15,7 @@ from classes.model.pix2code import *
 def run(input_path, output_path, is_memory_intensive=False, pretrained_model=None):
     np.random.seed(1234)
 
+    # 将数据格式化，用于cnn和lstm使用
     dataset = Dataset()
     dataset.load(input_path, generate_binary_sequences=True)
     dataset.save_metadata(output_path)
@@ -30,6 +31,7 @@ def run(input_path, output_path, is_memory_intensive=False, pretrained_model=Non
         print(len(dataset.input_images), len(dataset.partial_sequences), len(dataset.next_words))
         print(dataset.input_images.shape, dataset.partial_sequences.shape, dataset.next_words.shape)
     else:
+        # 加载所有数据的路径
         gui_paths, img_paths = Dataset.load_paths_only(input_path)
 
         input_shape = dataset.input_shape

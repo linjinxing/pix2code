@@ -24,7 +24,9 @@ class Vocabulary:
         if token not in self.vocabulary:
             self.vocabulary[token] = self.size
             self.token_lookup[self.size] = token
+            print("token:%s, size:%d" % (token, self.size))
             self.size += 1
+
 
     def create_binary_representation(self):
         if sys.version_info >= (3,):
@@ -32,6 +34,7 @@ class Vocabulary:
         else:
             items = self.vocabulary.iteritems()
         for key, value in items:
+            # 返回来一个给定形状和类型的用0填充的数组
             binary = np.zeros(self.size)
             binary[value] = 1
             self.binary_vocabulary[key] = binary
