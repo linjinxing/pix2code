@@ -11,8 +11,11 @@ SEPARATOR = '->'
 
 class Vocabulary:
     def __init__(self):
+        # 每个token所在的位置，表示成数组的方式，也即向量的方式
         self.binary_vocabulary = {}
+        # 每个token所在的位置，key是token，value是索引
         self.vocabulary = {}
+        # 每个token所在的位置，对应是什么token，key是索引，value是token
         self.token_lookup = {}
         self.size = 0
 
@@ -38,6 +41,9 @@ class Vocabulary:
             binary = np.zeros(self.size)
             binary[value] = 1
             self.binary_vocabulary[key] = binary
+        print('self.vocabulary:%r' % self.vocabulary)
+        print('self.token_lookup:%r' % self.token_lookup)
+        print('self.binary_vocabulary:%r' % self.binary_vocabulary)
 
     def get_serialized_binary_representation(self):
         if len(self.binary_vocabulary) == 0:

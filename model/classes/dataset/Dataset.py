@@ -64,7 +64,9 @@ class Dataset:
         print("generate_binary_sequences: {}".format(generate_binary_sequences))
         
         self.voc.create_binary_representation()
+        # next_words 替换成了self.voc中的数组
         self.next_words = self.sparsify_labels(self.next_words, self.voc)
+        print("next_words:", self.next_words)
         if generate_binary_sequences:
             self.partial_sequences = self.binarize(self.partial_sequences, self.voc)
         else:
