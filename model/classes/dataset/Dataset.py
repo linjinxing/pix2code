@@ -50,6 +50,7 @@ class Dataset:
         print("Loading data...")
         for f in os.listdir(path):
             if f.find(".gui") != -1:
+                print("file:%s" % f)
                 gui = open("{}/{}".format(path, f), 'r')
                 file_name = f[:f.find(".gui")]
 
@@ -64,11 +65,12 @@ class Dataset:
         print("generate_binary_sequences: {}".format(generate_binary_sequences))
         
         self.voc.create_binary_representation()
-        # next_words 替换成了self.voc中的数组
+        # next_words 替换成了self.voc中的数组向量
         self.next_words = self.sparsify_labels(self.next_words, self.voc)
         print("next_words:", self.next_words)
         if generate_binary_sequences:
             self.partial_sequences = self.binarize(self.partial_sequences, self.voc)
+            print("partial_sequences:", self.partial_sequences)
         else:
             self.partial_sequences = self.indexify(self.partial_sequences, self.voc)
 
@@ -99,6 +101,7 @@ class Dataset:
 
         token_sequence = [START_TOKEN]
         for line in gui:
+            # 不同的token用","隔开，换行也算是不同的，所以也加空格
             line = line.replace(",", " ,").replace("\n", " \n")
             tokens = line.split(" ")
             for token in tokens:
@@ -110,20 +113,23 @@ class Dataset:
         suffix = [PLACEHOLDER] * CONTEXT_LENGTH
         # print('suffix:%r' % suffix)
 
+        # 连接2个数组
         a = np.concatenate([suffix, token_sequence])
-        print('a:%r' % a)
+        print('concatenate a:%r' % a)
         for j in range(0, len(a) - CONTEXT_LENGTH):
+            # 当前的内容
             context = a[j:j + CONTEXT_LENGTH]
+            #下一个单词
             label = a[j + CONTEXT_LENGTH]
             # print('context:%r' % context)
-            # print('label:%r' % label)            
+            # print('label:%r' % label)          
 
             self.ids.append(sample_id)
             self.input_images.append(img)
             self.partial_sequences.append(context)
             self.next_words.append(label)
 
-        # print("partial_sequences:%r, next_words:%r" %(self.partial_sequences, self.next_words))
+        print("partial_sequences:%r\nnext_words:%r" %(self.partial_sequences, self.next_words))
 
     @staticmethod
     def indexify(partial_sequences, voc):
@@ -149,8 +155,10 @@ class Dataset:
 
     @staticmethod
     def sparsify_labels(next_words, voc):
+        """ nextwords 表示成数组向量的方式 """
         temp = []
         for label in next_words:
+            print("voc.binary_vocabulary[%s]:%r" % (label, voc.binary_vocabulary[label]))
             temp.append(voc.binary_vocabulary[label])
 
         return temp
